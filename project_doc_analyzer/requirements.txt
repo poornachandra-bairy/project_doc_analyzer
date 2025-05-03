@@ -17,7 +17,7 @@ faiss-cpu==1.7.2
 
 # Libraries for handling document formats
 python-docx==0.8.11
-pypdf==3.0.0
+pypdf  # Updated to latest version
 unstructured==0.6.1  # To process different document formats
 
 # Tokenization support
