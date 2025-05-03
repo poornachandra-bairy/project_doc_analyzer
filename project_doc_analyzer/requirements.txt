@@ -1,15 +1,17 @@
 # LangChain and dependencies
-langchain==0.1.14  # Downgrade langchain to a compatible version
+langchain==0.1.14
 langchain-openai==0.0.6
 openai==1.10.0
 langchain-community
 faiss-cpu==1.7.2
 
-# For handling document formats and tokenization
+# Tokenization support
+tiktoken==0.5.2  # Upgrade to a version that works with langchain-openai
+
+# For handling document formats
 python-docx==0.8.11
 pypdf
 unstructured==0.6.1
-tiktoken==0.2.0
 
-# For environment variables
+# For environment variable management
 python-dotenv==0.21.0
