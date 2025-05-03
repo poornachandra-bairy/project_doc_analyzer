@@ -14,4 +14,6 @@ def get_groq_response(user_input):
     if response.status_code == 200:
         return response.json()["response"]
     else:
-        return "Error with the Groq API response."
+        print(f"Error: {response.status_code}")
+        print(f"Response Text: {response.text}")
+        return f"Error with the Groq API response. Status Code: {response.status_code}, Message: {response.text}"
