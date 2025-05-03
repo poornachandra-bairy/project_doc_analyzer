@@ -1,21 +1,4 @@
-# Streamlit
-streamlit==1.34.0
-python-dotenv==0.21.0
-
-# LangChain and dependencies (working together)
-langchain==0.1.16
-langchain-openai==0.1.1
-langchain-community
-
-# Tokenization support
-tiktoken==0.5.2
-
-# Document handling
-python-docx==0.8.11
-pypdf
-unstructured==0.6.1
-
-# Google Cloud AI Platform (Vertex AI / Gemini)
-google-cloud-aiplatform==1.91.0
-google-auth==2.29.0
-google-auth-oauthlib==1.2.0
+streamlit
+requests
+PyPDF2
+python-docx
