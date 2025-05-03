@@ -1,16 +1,21 @@
-# main.py is optional for this case since the core logic is in app.py
-# If you have further document processing or other functions, you can define them here.
+import os
+from io import BytesIO
+from PyPDF2 import PdfReader
+from docx import Document
 
-# Example function: Process and extract text from uploaded documents
 def extract_text_from_file(uploaded_file):
     file_extension = os.path.splitext(uploaded_file.name)[-1].lower()
+
     if file_extension == ".pdf":
-        # Parse PDF (use PyPDF2, PyMuPDF, etc.)
-        return "Extracted text from PDF"
+        reader = PdfReader(uploaded_file)
+        return "\n".join([page.extract_text() for page in reader.pages if page.extract_text()])
+
     elif file_extension == ".docx":
-        # Parse DOCX (use python-docx, etc.)
-        return "Extracted text from DOCX"
+        doc = Document(uploaded_file)
+        return "\n".join([para.text for para in doc.paragraphs])
+
     elif file_extension == ".txt":
         return uploaded_file.getvalue().decode("utf-8")
+
     else:
-        raise ValueError("Unsupported file type")
+        return "Unsupported file type"
