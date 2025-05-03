@@ -1,21 +1,22 @@
-import os
-from io import BytesIO
 from PyPDF2 import PdfReader
-from docx import Document
+import re
 
-def extract_text_from_file(uploaded_file):
-    file_extension = os.path.splitext(uploaded_file.name)[-1].lower()
+def extract_text_from_pdf(uploaded_file):
+    reader = PdfReader(uploaded_file)
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text() or ""
+    return text.strip()
 
-    if file_extension == ".pdf":
-        reader = PdfReader(uploaded_file)
-        return "\n".join([page.extract_text() for page in reader.pages if page.extract_text()])
+def get_summary_and_options(text):
+    # Basic summary logic — can be replaced with a better summarizer later
+    first_20_words = " ".join(text.split()[:20])
+    summary = f"This document appears to be about: {first_20_words}..."
 
-    elif file_extension == ".docx":
-        doc = Document(uploaded_file)
-        return "\n".join([para.text for para in doc.paragraphs])
-
-    elif file_extension == ".txt":
-        return uploaded_file.getvalue().decode("utf-8")
-
-    else:
-        return "Unsupported file type"
+    # Generate 3 prompt suggestions
+    options = [
+        "Summarize the entire document.",
+        "What are the key points in this document?",
+        "Does this document contain any important dates or deadlines?"
+    ]
+    return summary, options
