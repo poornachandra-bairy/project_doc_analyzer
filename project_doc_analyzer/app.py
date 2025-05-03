@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import tempfile
 import os
 
+# Load environment variables
 load_dotenv()  # Load .env locally
 st.set_page_config(page_title="Chat with Your File", layout="wide")
 st.title("📄 Chat with PDF / Word / Text Files")
