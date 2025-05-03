@@ -18,7 +18,7 @@ def query_groq(prompt):
         "Content-Type": "application/json"
     }
     data = {
-        "model": "mixtral-8x7b-32768",  # Or other model like llama3-8b, gemma-7b-it
+        "model": "llama3-8b-8192",  # Or other model like llama3-8b, gemma-7b-it
         "messages": [
             {"role": "system", "content": "You're an assistant that helps with understanding documents."},
             {"role": "user", "content": prompt}
