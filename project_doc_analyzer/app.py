@@ -1,71 +1,46 @@
-import os
 import streamlit as st
-from langchain.chat_models import ChatGroq
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferWindowMemory
-from langchain.prompts import PromptTemplate
-from PyPDF2 import PdfReader
+from langchain_handler import get_langchain_response
+from groq_api import get_groq_response
+from session_manager import SessionMemory
+from utils import extract_text_from_file
 
-from main import extract_text_from_pdf, get_summary_and_options
+# Initialize session memory
+session_memory = SessionMemory()
 
-# Set API Key directly from Streamlit secrets
-groq_api_key = st.secrets["GROQ_API_KEY"]
-os.environ["GROQ_API_KEY"] = groq_api_key
+# Set Streamlit page settings
+st.set_page_config(page_title="Document Analyzer", layout="wide")
+st.title("📄 Document Analyzer - Powered by Groq and Langchain")
 
-# Session memory: store last 4 interactions
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+# File upload UI
+uploaded_file = st.file_uploader("Upload a file", type=["pdf", "docx", "txt"])
 
-st.set_page_config(page_title="RAG AI Chat", layout="wide")
-st.title("📄 Chat with Your Document - Powered by Groq + Langchain")
-
-# File Upload
-uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
 if uploaded_file:
-    with st.spinner("Reading and summarizing document..."):
-        text = extract_text_from_pdf(uploaded_file)
-        summary, options = get_summary_and_options(text)
+    file_extension = uploaded_file.name.split('.')[-1].lower()
+    extracted_text = extract_text_from_file(uploaded_file, file_extension)
+    
+    st.success("File uploaded successfully!")
+    st.write("Extracted Text:", extracted_text)
 
-        st.markdown(f"**📝 Summary:** {summary}")
-        st.markdown("### 💡 Suggested Questions:")
-        for i, option in enumerate(options, 1):
-            st.button(option, key=f"option_{i}", on_click=lambda opt=option: st.session_state.update({"user_input": opt}))
+    # Session memory management: Retrieve last 4 conversation context
+    session_context = session_memory.get_context()
 
-    # Custom user input
-    user_input = st.text_input("Or ask your own question:", key="user_input")
+    user_input = st.text_input("Ask a question about the document:")
 
     if user_input:
-        with st.spinner("Thinking..."):
-            llm = ChatGroq(temperature=0.2, groq_api_key=groq_api_key, model_name="llama3-8b-8192")
-            memory = ConversationBufferWindowMemory(k=4, memory_key="chat_history", return_messages=True)
+        if "langchain" in st.session_state:
+            # Use Langchain for AI response
+            response = get_langchain_response(user_input, session_context)
+        else:
+            # Use Groq API for AI response
+            response = get_groq_response(user_input)
 
-            prompt_template = PromptTemplate(
-                input_variables=["question", "chat_history"],
-                template="""
-You are an AI assistant. Use the document context and your reasoning to answer.
+        # Update session memory with new input and response
+        session_memory.update(user_input, response)
+        st.write("AI Response:", response)
 
-Chat history:
-{chat_history}
+    # Show 3 options based on the file content
+    options = ["Summarize the content", "Find key points", "Translate the document"]
+    selected_option = st.selectbox("Choose an option:", options)
 
-User question:
-{question}
-"""
-            )
-
-            chain = ConversationalRetrievalChain.from_llm(
-                llm=llm,
-                retriever=None,  # No vector store for now
-                memory=memory,
-                combine_docs_chain_kwargs={"prompt": prompt_template}
-            )
-
-            response = chain.run(question=user_input)
-            st.session_state.chat_history.append(("User", user_input))
-            st.session_state.chat_history.append(("AI", response))
-            st.markdown(f"**🤖 Response:** {response}")
-
-    # Display chat history
-    if st.session_state.chat_history:
-        st.markdown("### 🧠 Conversation Memory (Last 4):")
-        for role, msg in st.session_state.chat_history[-8:]:
-            st.markdown(f"**{role}:** {msg}")
+    if selected_option:
+        st.write(f"Selected Option: {selected_option}")
