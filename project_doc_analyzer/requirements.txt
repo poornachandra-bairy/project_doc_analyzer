@@ -1,11 +1,27 @@
-streamlit
+# Streamlit framework
+streamlit==1.17.0
+
+# Langchain dependencies for document processing and LLM integration
 langchain>=0.1.0
 langchain-community
 langchain-openai
-openai
-faiss-cpu
-python-docx
-pypdf
-unstructured
-tiktoken
-python-dotenv
+
+# OpenAI API integration
+openai==0.27.0
+
+# Hugging Face integration
+huggingface_hub==0.12.1
+
+# FAISS for vector storage and retrieval
+faiss-cpu==1.7.2
+
+# Libraries for handling document formats
+python-docx==0.8.11
+pypdf==3.0.0
+unstructured==0.6.1  # To process different document formats
+
+# Tokenization support
+tiktoken==0.2.0
+
+# For environment variable management
+python-dotenv==0.21.0
