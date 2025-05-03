@@ -24,8 +24,8 @@ def get_groq_response(text_input):
 
     if response.status_code == 200:
         response_json = response.json()
-        st.write("Groq API response:", response_json)  # Debug output
-        groq_output = response_json["choices"][0]["index"]["message"]["content"]
+        groq_output = response_json["choices"][0]["message"]["content"]
+        st.write("Groq API response:", groq_output)  # Debug output
         return groq_output
     else:
         st.error(f"Error: {response.status_code} - {response.text}")
