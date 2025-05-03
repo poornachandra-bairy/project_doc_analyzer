@@ -1,6 +1,6 @@
 streamlit==1.19.0
 langchain==0.2.13
-groq==0.1.0
+groq==0.24.0
 openai==0.27.0
 rich==12.6.0
 altair==4.2.2
