@@ -13,12 +13,13 @@ def get_groq_response(text_input):
     }
     data = {
         "model": "llama3-8b-8192",  # Specify the model you're using
-        "n": 1,                     # Set the number of completions to return
-        "max_tokens": 500,          # Maximum number of tokens for the response
-        "stop": ["\n"],             # Optional: add a stop sequence if needed
-        "temperature": 0.7,         # Optional: control randomness (0 = deterministic)
-        "top_p": 1.0,               # Optional: use top-p sampling for diversity
-        "input": text_input         # Pass the user input here
+        "messages": [
+            {"role": "user", "content": text_input}
+        ],
+        "temperature": 0.7,  # Optional: adjust for randomness
+        "max_tokens": 500,   # Optional: adjust as needed
+        "top_p": 1.0,        # Optional: adjust for nucleus sampling
+        "stream": False      # Optional: set to True for streaming responses
     }
 
     # Send POST request to Groq API
