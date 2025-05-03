@@ -1,20 +1,16 @@
-# LangChain and dependencies
-langchain==0.2.13
-langchain-community
+# Streamlit and necessary libraries
+streamlit==1.18.0
 
-# For Google Cloud AI (Vertex AI)
-google-cloud-aiplatform==2.12.0  # Google Cloud AI SDK for Vertex AI
-
-# For document processing and embeddings
-faiss-cpu==1.7.2
-
-# Tokenization support (not needed for Google AI, but you can keep it)
-tiktoken==0.5.2
-
-# For handling document formats
-python-docx==0.8.11
-pypdf
-unstructured==0.6.1
+# Google Cloud Vertex AI
+google-cloud-aiplatform==2.9.0
 
 # For environment variable management
 python-dotenv==0.21.0
+
+# For handling document formats
+python-docx==0.8.11
+pypdf==1.26.0
+unstructured==0.6.1
+
+# Optional, if you're processing large documents
+faiss-cpu==1.7.2
