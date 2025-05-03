@@ -5,6 +5,11 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from dotenv import load_dotenv
+from langchain.embeddings import OpenAIEmbeddings, HuggingFaceEmbeddings
+from langchain.llms import OpenAI
+from llama_cpp import Llama  # or your local LLaMA wrapper
+from your_local_llm_wrapper import LocalLlamaLLM  # hypothetical wrapper
+# Make sure you install and setup llama-cpp-python or ollama properly
 
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -38,23 +43,25 @@ def load_documents(file_path):
     return loader.load()
 
 def ingest(file_path):
-    logger.info("Starting ingestion process")
     documents = load_documents(file_path)
-    logger.info(f"Loaded {len(documents)} documents")
-
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     docs = splitter.split_documents(documents)
-    logger.info(f"Split into {len(docs)} chunks")
 
-    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+    if is_openai_quota_available():
+        embeddings = OpenAIEmbeddings()
+    else:
+        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
     vectorstore = FAISS.from_documents(docs, embeddings)
-    logger.info("Vectorstore created successfully")
     return vectorstore
 
 def create_chatbot(vectorstore):
-    from langchain.chains import ConversationalRetrievalChain
-    from langchain.chat_models import ChatOpenAI
+    if is_openai_quota_available():
+        llm = OpenAI(temperature=0)
+    else:
+        # Replace with your local LLaMA model instance
+        llm = LocalLlamaLLM(model_path="models/llama-2.gguf")  # customize
 
-    logger.info("Creating chatbot using vectorstore")
-    llm = ChatOpenAI(temperature=0.0, openai_api_key=openai_api_key)
-    return ConversationalRetrievalChain.from_llm(llm, vectorstore.as_retriever())
+    from langchain.chains import ConversationalRetrievalChain
+    chatbot = ConversationalRetrievalChain.from_llm(llm, retriever=vectorstore.as_retriever())
+    return chatbot
