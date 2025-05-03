@@ -25,6 +25,8 @@ def get_groq_response(text_input):
     # Send POST request to Groq API
     response = requests.post(url, json=data, headers=headers)
 
+    st.write(response.json())
+    
     if response.status_code == 200:
         # Parse the response and extract the generated text
         response_json = response.json()
