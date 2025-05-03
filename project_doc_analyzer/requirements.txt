@@ -1,6 +1,6 @@
 # LangChain and dependencies
-langchain==0.2.13
-langchain-openai==0.1.0  # Upgrade langchain-openai to a version compatible with 0.2.13
+langchain==0.1.14  # Downgrade langchain to a compatible version
+langchain-openai==0.0.6
 openai==1.10.0
 langchain-community
 faiss-cpu==1.7.2
