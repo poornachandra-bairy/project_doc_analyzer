@@ -5,3 +5,4 @@ python-dotenv==0.21.0
 rich==13.4.0
 altair==4.2.2
 markdown-it-py==2.2.0  # Set markdown-it-py to a version less than 3.0.0
+PyPDF2>=1.26.0
