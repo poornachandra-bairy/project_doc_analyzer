@@ -11,7 +11,8 @@ st.title("📄 Chat with PDF / Word / Text Files")
 uploaded_file = st.file_uploader("Upload a file", type=["pdf", "docx", "txt"])
 
 if uploaded_file:
-    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+    file_extension = os.path.splitext(uploaded_file.name)[-1]
+    with tempfile.NamedTemporaryFile(delete=False, suffix=file_extension) as tmp_file:
         tmp_file.write(uploaded_file.getvalue())
         tmp_path = tmp_file.name
 
