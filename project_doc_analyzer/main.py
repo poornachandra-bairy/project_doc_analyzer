@@ -14,15 +14,19 @@ load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
 def load_documents(file_path):
-    # Add checks to support different file types
-    if file_path.endswith(".pdf"):
+    # Get the file extension from the file path
+    file_name, file_extension = os.path.splitext(file_path)
+    print(f"Loading file: {file_path} with extension {file_extension}")  # Log the file path and extension
+
+    # Check file extension and choose loader
+    if file_extension == ".pdf":
         loader = PyPDFLoader(file_path)
-    elif file_path.endswith(".docx"):
+    elif file_extension == ".docx":
         loader = UnstructuredWordDocumentLoader(file_path)
-    elif file_path.endswith(".txt"):
+    elif file_extension == ".txt":
         loader = TextLoader(file_path)
     else:
-        raise ValueError(f"Unsupported file type: {file_path}")
+        raise ValueError(f"Unsupported file type: {file_path} with extension {file_extension}")
     return loader.load()
 
 def ingest(file_path):
