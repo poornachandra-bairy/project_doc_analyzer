@@ -4,7 +4,7 @@ import streamlit as st
 # Function to get Groq API response
 def get_groq_response(user_input):
     api_key = st.secrets["GROQ_API_KEY"]  # Access the API key from Streamlit secrets
-    endpoint = "https://api.groq.com/v1/predict"
+    endpoint = "https://api.groq.com/v1/query"
     headers = {"Authorization": f"Bearer {api_key}"}
     data = {"input": user_input}
 
