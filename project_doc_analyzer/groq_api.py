@@ -3,7 +3,7 @@ import requests
 
 # Function to get Groq API response
 def get_groq_response(user_input):
-    api_key = openai_secret_manager.get_secret("groq")['api_key']  # assuming API key is stored in Streamlit secrets
+    api_key = openai_secret_manager.get_secret("groq")['GROQ_API_KEY']  # assuming API key is stored in Streamlit secrets
     endpoint = "https://api.groq.com/v1/predict"
     headers = {"Authorization": f"Bearer {api_key}"}
     data = {"input": user_input}
