@@ -28,7 +28,7 @@ def get_groq_response(text_input):
     if response.status_code == 200:
         # Parse the response and extract the generated text
         response_json = response.json()
-        groq_output = response_json["choices"][0]["text"]
+        groq_output = response_json["choices"][0]["message"]["content"]
         return groq_output
     else:
         # Handle error and display the error message in Streamlit
