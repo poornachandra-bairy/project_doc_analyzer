@@ -1,11 +1,12 @@
 import os
 from dotenv import load_dotenv
+from langchain_community.document_loaders import UnstructuredWordDocumentLoader
+from langchain.document_loaders import PyPDFLoader, TextLoader
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import FAISS
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.document_loaders import PyPDFLoader, TextLoader, UnstructuredWordDocumentLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 # Load environment variables
@@ -13,6 +14,7 @@ load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
 def load_documents(file_path):
+    # Add checks to support different file types
     if file_path.endswith(".pdf"):
         loader = PyPDFLoader(file_path)
     elif file_path.endswith(".docx"):
@@ -20,7 +22,7 @@ def load_documents(file_path):
     elif file_path.endswith(".txt"):
         loader = TextLoader(file_path)
     else:
-        raise ValueError("Unsupported file type.")
+        raise ValueError(f"Unsupported file type: {file_path}")
     return loader.load()
 
 def ingest(file_path):
