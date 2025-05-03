@@ -1,4 +1,6 @@
-streamlit
-langchain
-groq
-PyPDF2
+streamlit==1.18.0
+requests==2.28.2
+langchain==0.0.143
+openai==0.27.0
+PyPDF2==1.26.0
+python-docx==0.8.11
