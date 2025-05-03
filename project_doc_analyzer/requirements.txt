@@ -2,8 +2,8 @@
 streamlit==1.34.0
 python-dotenv==0.21.0
 
-# LangChain and dependencies
-langchain==0.2.13
+# LangChain and dependencies (working together)
+langchain==0.1.16
 langchain-openai==0.1.1
 langchain-community
 faiss-cpu==1.7.2
@@ -16,9 +16,7 @@ python-docx==0.8.11
 pypdf
 unstructured==0.6.1
 
-# Google Cloud AI Platform (Vertex AI for Google AI Studio)
+# Google Cloud AI Platform (Vertex AI / Gemini)
 google-cloud-aiplatform==1.91.0
-
-# Google authentication (optional but useful for local dev)
 google-auth==2.29.0
 google-auth-oauthlib==1.2.0
