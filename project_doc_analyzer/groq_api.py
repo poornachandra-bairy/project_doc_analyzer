@@ -13,7 +13,7 @@ def get_groq_response(text_input):
     }
     data = {
         "model": "llama3-8b-8192",  # Specify the model you're using
-        "prompt": text_input,        # Pass the input text
+        "input": text_input,        # Pass the input text
         "max_tokens": 500            # Maximum number of tokens for the response
     }
 
