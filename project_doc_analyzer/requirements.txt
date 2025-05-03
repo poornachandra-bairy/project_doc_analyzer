@@ -1,13 +1,25 @@
-langchain==0.1.14
+langchain==0.2.13
 langchain-core==0.1.45
 langchain-community==0.0.30
 langchain-openai==0.0.6
-openai==0.27.0
+openai==1.10.0
+
+# Streamlit framework
 streamlit==1.17.0
+
+# Hugging Face integration
 huggingface_hub==0.14.1
+
+# FAISS for vector storage and retrieval
 faiss-cpu==1.7.2
+
+# Libraries for handling document formats
 python-docx==0.8.11
 pypdf==3.17.4
 unstructured==0.6.1
+
+# Tokenization support
 tiktoken==0.2.0
+
+# For environment variable management
 python-dotenv==0.21.0
