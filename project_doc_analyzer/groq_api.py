@@ -6,7 +6,7 @@ def get_groq_response(text_input):
     # Access the Groq API key directly from Streamlit secrets
     groq_api_key = st.secrets["GROQ_API_KEY"]  # Ensure the secret is set in Streamlit
 
-    url = "https://api.groq.com/openai/v1/chat/completions"
+    url = "https://api.groq.com/openai/v1/completions"
     headers = {
         "Authorization": f"Bearer {groq_api_key}",
         "Content-Type": "application/json"
