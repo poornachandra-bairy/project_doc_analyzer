@@ -1,29 +1,68 @@
-# Show 3 button options based on the file content
-st.markdown("### Quick Actions")
-col1, col2, col3 = st.columns(3)
+import streamlit as st
+from langchain_handler import get_langchain_response
+from groq_api import get_groq_response
+from session_manager import SessionMemory
+from utils import extract_text_from_file
 
-option_prompts = {
-    "Summarize the content": "Please summarize the uploaded document.",
-    "Find key points": "List the key points from the document.",
-    "Translate the document": "Translate the document into English."
-}
+# Initialize session memory
+session_memory = SessionMemory()
 
-if col1.button("Summarize the content"):
-    action_input = option_prompts["Summarize the content"]
-elif col2.button("Find key points"):
-    action_input = option_prompts["Find key points"]
-elif col3.button("Translate the document"):
-    action_input = option_prompts["Translate the document"]
-else:
-    action_input = None
+# Streamlit page config
+st.set_page_config(page_title="Document Analyzer", layout="wide")
+st.title("📄 Document Analyzer - Powered by Groq and Langchain")
 
-if action_input:
-    st.write(f"Selected Option: {action_input}")
+# File uploader
+uploaded_file = st.file_uploader("Upload a file", type=["pdf", "docx", "txt"])
 
-    if "langchain" in st.session_state:
-        response = get_langchain_response(action_input, session_context)
-    else:
-        response = get_groq_response(action_input)
+# Initialize extracted_text
+extracted_text = ""
 
-    session_memory.update(action_input, response)
-    st.write("AI Response:", response)
+if uploaded_file:
+    file_extension = uploaded_file.name.split('.')[-1].lower()
+    extracted_text = extract_text_from_file(uploaded_file, file_extension)
+    
+    st.success("File uploaded successfully!")
+    st.write("Extracted Text:", extracted_text)
+
+    # Quick Actions as buttons
+    st.markdown("### Quick Actions")
+    col1, col2, col3 = st.columns(3)
+
+    option_prompts = {
+        "Summarize the content": "Summarize this document.",
+        "Find key points": "List the key points from this document.",
+        "Translate the document": "Translate this document to Hindi."
+    }
+
+    # Handle button clicks
+    selected_option = None
+    with col1:
+        if st.button("Summarize"):
+            selected_option = option_prompts["Summarize the content"]
+    with col2:
+        if st.button("Find Key Points"):
+            selected_option = option_prompts["Find key points"]
+    with col3:
+        if st.button("Translate"):
+            selected_option = option_prompts["Translate the document"]
+
+    if selected_option:
+        st.markdown(f"**Selected Prompt:** {selected_option}")
+        ai_input = f"{selected_option}\n\n{extracted_text}"
+        ai_response = get_groq_response(ai_input)
+        session_memory.update(selected_option, ai_response)
+        st.write("AI Response:", ai_response)
+
+    # Manual question input
+    st.markdown("---")
+    st.markdown("### Ask Your Own Question")
+    session_context = session_memory.get_context()
+    user_input = st.text_input("Ask a question about the document:")
+
+    if user_input:
+        if "langchain" in st.session_state:
+            response = get_langchain_response(user_input, session_context)
+        else:
+            response = get_groq_response(user_input)
+        session_memory.update(user_input, response)
+        st.write("AI Response:", response)
