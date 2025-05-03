@@ -6,15 +6,19 @@ def get_groq_response(text_input):
     # Access the Groq API key directly from Streamlit secrets
     groq_api_key = st.secrets["GROQ_API_KEY"]  # Ensure the secret is set in Streamlit
 
-    url = "https://api.groq.com/openai/v1/completions"
+    url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {groq_api_key}",
         "Content-Type": "application/json"
     }
     data = {
         "model": "llama3-8b-8192",  # Specify the model you're using
-        "input": text_input,        # Pass the input text
-        "max_tokens": 500            # Maximum number of tokens for the response
+        "n": 1,                     # Set the number of completions to return
+        "max_tokens": 500,          # Maximum number of tokens for the response
+        "stop": ["\n"],             # Optional: add a stop sequence if needed
+        "temperature": 0.7,         # Optional: control randomness (0 = deterministic)
+        "top_p": 1.0,               # Optional: use top-p sampling for diversity
+        "input": text_input         # Pass the user input here
     }
 
     # Send POST request to Groq API
