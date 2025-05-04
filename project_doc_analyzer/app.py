@@ -52,6 +52,13 @@ if uploaded_file:
         session_memory.update(selected_option, ai_response)
         st.write("AI Response:", ai_response)
 
+        # Dynamically generate buttons based on AI response
+        st.markdown("### Additional Actions")
+        response_options = ["Option 1", "Option 2", "Option 3"]  # Replace with actual options based on ai_response
+        for option in response_options:
+            if st.button(option):
+                st.write(f"You selected: {option}")
+
     # Manual question input
     st.markdown("---")
     st.markdown("### Ask Your Own Question")
@@ -66,3 +73,10 @@ if uploaded_file:
             response = get_groq_response(combined_input)
         session_memory.update(user_input, response)
         st.write("AI Response:", response)
+
+        # Dynamically generate buttons based on AI response
+        st.markdown("### Additional Actions")
+        response_options = ["Option 1", "Option 2", "Option 3"]  # Replace with actual options based on response
+        for option in response_options:
+            if st.button(option):
+                st.write(f"You selected: {option}")
