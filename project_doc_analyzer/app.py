@@ -52,12 +52,32 @@ if uploaded_file:
         session_memory.update(selected_option, ai_response)
         st.write("AI Response:", ai_response)
 
-        # Dynamically generate buttons based on AI response
-        st.markdown("### Additional Actions")
-        response_options = ["Option 1", "Option 2", "Option 3"]  # Replace with actual options based on ai_response
-        for option in response_options:
-            if st.button(option):
-                st.write(f"You selected: {option}")
+        # Dynamically update button options based on AI response
+        st.markdown("### Updated Quick Actions")
+        updated_prompts = {
+            "Summarize the content": "Summarize this document. Keep it very short.",
+            "Find key points": "List the key points from this document and explain in bullet points. Keep it very short.",
+            "Translate the document": "Translate this document to Hindi.",
+            # Add more options based on ai_response if needed
+        }
+
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("Summarize"):
+                selected_option = updated_prompts["Summarize the content"]
+        with col2:
+            if st.button("Find Key Points"):
+                selected_option = updated_prompts["Find key points"]
+        with col3:
+            if st.button("Translate"):
+                selected_option = updated_prompts["Translate the document"]
+
+        if selected_option:
+            st.markdown(f"**Selected Prompt:** {selected_option}")
+            ai_input = f"{selected_option}\n\n{extracted_text}"
+            ai_response = get_groq_response(ai_input)
+            session_memory.update(selected_option, ai_response)
+            st.write("AI Response:", ai_response)
 
     # Manual question input
     st.markdown("---")
@@ -74,9 +94,29 @@ if uploaded_file:
         session_memory.update(user_input, response)
         st.write("AI Response:", response)
 
-        # Dynamically generate buttons based on AI response
-        st.markdown("### Additional Actions")
-        response_options = ["Option 1", "Option 2", "Option 3"]  # Replace with actual options based on response
-        for option in response_options:
-            if st.button(option):
-                st.write(f"You selected: {option}")
+        # Dynamically update button options based on AI response
+        st.markdown("### Updated Quick Actions")
+        updated_prompts = {
+            "Summarize the content": "Summarize this document. Keep it very short.",
+            "Find key points": "List the key points from this document and explain in bullet points. Keep it very short.",
+            "Translate the document": "Translate this document to Hindi.",
+            # Add more options based on response if needed
+        }
+
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("Summarize"):
+                selected_option = updated_prompts["Summarize the content"]
+        with col2:
+            if st.button("Find Key Points"):
+                selected_option = updated_prompts["Find key points"]
+        with col3:
+            if st.button("Translate"):
+                selected_option = updated_prompts["Translate the document"]
+
+        if selected_option:
+            st.markdown(f"**Selected Prompt:** {selected_option}")
+            ai_input = f"{selected_option}\n\n{extracted_text}"
+            ai_response = get_groq_response(ai_input)
+            session_memory.update(selected_option, ai_response)
+            st.write("AI Response:", ai_response)
