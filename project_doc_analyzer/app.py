@@ -20,17 +20,16 @@ extracted_text = ""
 if uploaded_file:
     file_extension = uploaded_file.name.split('.')[-1].lower()
     extracted_text = extract_text_from_file(uploaded_file, file_extension)
-    
+
     st.success("File uploaded successfully!")
-    st.write("Extracted Text:", extracted_text)
 
     # Quick Actions as buttons
     st.markdown("### Quick Actions")
     col1, col2, col3 = st.columns(3)
 
     option_prompts = {
-        "Summarize the content": "Summarize this document.",
-        "Find key points": "List the key points from this document.",
+        "Summarize the content": "Summarize this document. Keep it very short.",
+        "Find key points": "List the key points from this document and explain in bullet points. Keep it very short.",
         "Translate the document": "Translate this document to Hindi."
     }
 
@@ -60,9 +59,10 @@ if uploaded_file:
     user_input = st.text_input("Ask a question about the document:")
 
     if user_input:
+        combined_input = f"{user_input}\n\n{extracted_text}"
         if "langchain" in st.session_state:
-            response = get_langchain_response(user_input, session_context)
+            response = get_langchain_response(combined_input, session_context)
         else:
-            response = get_groq_response(user_input)
+            response = get_groq_response(combined_input)
         session_memory.update(user_input, response)
         st.write("AI Response:", response)
